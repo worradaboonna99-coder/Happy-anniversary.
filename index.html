@@ -14,409 +14,367 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Anniversary</title>
-    <!-- Google Fonts: Sarabun for Thai text -->
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <title>Happy Anniversary 1 Year 6 Months</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Kanit -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&family=Pacifico&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Sarabun', 'sans-serif'],
-                        script: ['Dancing Script', 'cursive'],
-                    },
-                    colors: {
-                        love: {
-                            50: '#fff1f2',
-                            100: '#ffe4e6',
-                            200: '#fecdd3',
-                            300: '#fda4af',
-                            400: '#fb7185',
-                            500: '#f43f5e',
-                            600: '#e11d48',
-                        }
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-20px)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
     <style>
         body {
-            background-color: #fce7f3;
+            font-family: 'Kanit', sans-serif;
             overflow-x: hidden;
+            background-color: #fff5f7;
+        }
+
+        /* --- Animations --- */
+        @keyframes leanRight {
+            0%, 100% { transform: rotate(10deg) translateX(0); }
+            50% { transform: rotate(15deg) translateX(5px); }
+        }
+        @keyframes leanLeft {
+            0%, 100% { transform: rotate(-10deg) translateX(0) scaleX(-1); } /* ScaleX(-1) flips the pig to face left */
+            50% { transform: rotate(-15deg) translateX(-5px) scaleX(-1); }
+        }
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        @keyframes moveWave {
+            0% { transform: translateX(0) translateZ(0) scaleY(1) }
+            50% { transform: translateX(-25%) translateZ(0) scaleY(0.8) }
+            100% { transform: translateX(-50%) translateZ(0) scaleY(1) }
+        }
+        @keyframes sunGlow {
+            0%, 100% { box-shadow: 0 0 40px #ff9966, 0 0 80px #ff5e62; }
+            50% { box-shadow: 0 0 60px #ff9966, 0 0 100px #ff5e62; }
+        }
+        @keyframes crabWalk {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            25% { transform: translateX(10px) rotate(5deg); }
+            75% { transform: translateX(-5px) rotate(-5deg); }
+        }
+        @keyframes floatItem {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
         
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #ffe4e6;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #fb7185;
-            border-radius: 10px;
+        /* New Text Reveal Animation */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Floating Hearts Background */
-        .bg-heart {
+        .kiss-dog { animation: leanRight 2s ease-in-out infinite; display: inline-block; }
+        .kiss-pig { animation: leanLeft 2s ease-in-out infinite; display: inline-block; }
+        .kiss-heart { animation: heartBeat 1.5s ease-in-out infinite; }
+        
+        .crab-anim { animation: crabWalk 4s ease-in-out infinite; }
+        .float-item { animation: floatItem 3s ease-in-out infinite; }
+        
+        .reveal-text { opacity: 0; }
+        .animate-reveal { animation: fadeInUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+
+        /* --- Vivid Sunset Ocean Background --- */
+        .sunset-bg {
+            /* More vibrant and smoother gradient */
+            background: linear-gradient(180deg, 
+                #2b1055 0%,   /* Deep Purple Night */
+                #7597de 40%,  /* Soft Blue */
+                #ff9a9e 70%,  /* Pink Peach */
+                #fad0c4 90%,  /* Soft Orange */
+                #fbc2eb 100%  /* Lavender */
+            );
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sun {
             position: absolute;
-            color: rgba(251, 113, 133, 0.2);
-            z-index: -1;
-            animation: float 10s infinite;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 140px;
+            background: linear-gradient(to bottom, #fff, #ffd700);
+            border-radius: 50%;
+            animation: sunGlow 4s infinite alternate;
+            z-index: 1;
         }
 
-        /* Input styling */
-        .pin-input {
-            transition: all 0.3s ease;
+        .waves-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 45vh; /* Taller waves */
+            z-index: 5;
+            overflow: hidden;
         }
-        .pin-input:focus {
-            transform: scale(1.05);
-            border-color: #f43f5e;
-            box-shadow: 0 0 15px rgba(244, 63, 94, 0.3);
+
+        .wave {
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 88.7'%3E%3Cpath d='M800 56.9c-155.5 0-204.9-50-405.5-49.9-200 0-250 49.9-394.5 49.9v31.8h800v-.2-31.6z' fill='%23ffffff'/%3E%3C/svg%3E");
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            animation: moveWave 25s linear infinite;
+            transform: translate3d(0, 0, 0);
+            bottom: 0;
+            left: 0;
+        }
+        .wave:nth-of-type(1) { bottom: 0; animation-duration: 20s; fill: rgba(255,255,255,0.4); }
+        .wave:nth-of-type(2) { bottom: 10px; animation-duration: 15s; animation-direction: reverse; opacity: 0.5; }
+        .wave:nth-of-type(3) { bottom: 20px; animation-duration: 10s; opacity: 0.3; }
+
+        .beach-element {
+            position: absolute;
+            z-index: 20;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
+            user-select: none;
         }
 
         /* Glassmorphism */
-        .glass {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+            z-index: 50;
         }
 
-        .photo-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .photo-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        .hidden-screen { display: none !important; }
+        
+        .bg-pattern {
+            background-image: radial-gradient(#ffb7b2 1px, transparent 1px), radial-gradient(#ffb7b2 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
         }
     </style>
 </head>
-<body class="min-h-screen relative font-sans text-gray-800">
+<body class="min-h-screen flex items-center justify-center relative bg-pattern">
 
-    <!-- Background Elements -->
-    <div id="bg-hearts-container" class="fixed inset-0 pointer-events-none overflow-hidden h-full w-full">
-        <!-- JS will populate hearts here -->
-    </div>
-
-    <!-- LOGIN SCREEN -->
-    <div id="login-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-gradient-to-br from-pink-100 via-red-50 to-white transition-opacity duration-700">
-        <div class="glass p-8 rounded-3xl shadow-2xl max-w-md w-full text-center border-white/50 border-2">
-            <div class="mb-6">
-                <i class="fa-solid fa-lock text-5xl text-love-400 animate-pulse-slow"></i>
-            </div>
-            <h1 class="text-2xl font-bold text-gray-700 mb-2">ความลับของเรา</h1>
-            <p class="text-gray-500 mb-6 text-sm">กรุณาใส่รหัสผ่าน 6 หลักเพื่อเข้าสู่หัวใจ</p>
-            
-            <div class="flex justify-center gap-2 mb-6" id="pin-container">
-                <!-- Inputs generated by JS -->
-            </div>
-            <p id="error-msg" class="text-red-500 text-sm h-5 font-semibold opacity-0 transition-opacity">รหัสผิดครับ ลองใหม่อีกครั้งนะ</p>
-        </div>
-    </div>
-
-    <!-- MAIN CONTENT (Hidden by default) -->
-    <div id="main-content" class="hidden opacity-0 transition-opacity duration-1000">
+    <!-- ================== SCREEN 1: LOGIN (SUNSET BEACH KISS THEME) ================== -->
+    <div id="loginScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center sunset-bg transition-opacity duration-700">
         
-        <!-- Header / Hero -->
-        <header class="pt-20 pb-10 px-4 text-center relative">
-            <div class="animate-float">
-                <i class="fa-solid fa-heart text-6xl text-love-500 mb-4 drop-shadow-lg"></i>
-            </div>
-            <h1 class="font-script text-6xl md:text-8xl text-love-600 mb-4 drop-shadow-sm">Happy Anniversary</h1>
-            <p class="text-xl md:text-2xl text-gray-600 font-light">ขอบคุณที่อยู่ข้างกันมาตลอดนะ</p>
-        </header>
+        <div class="sun"></div>
 
-        <!-- Counter Section -->
-        <section class="max-w-4xl mx-auto px-4 mb-16">
-            <div class="glass rounded-3xl p-8 shadow-lg text-center transform hover:scale-[1.01] transition-transform">
-                <h2 class="text-2xl font-bold text-gray-700 mb-6"><i class="fa-regular fa-clock mr-2"></i>เวลาที่เราอยู่ด้วยกัน</h2>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="bg-white/60 rounded-xl p-4 shadow-sm">
-                        <span id="days" class="block text-4xl font-bold text-love-500">0</span>
-                        <span class="text-sm text-gray-500">วัน</span>
-                    </div>
-                    <div class="bg-white/60 rounded-xl p-4 shadow-sm">
-                        <span id="hours" class="block text-4xl font-bold text-love-500">0</span>
-                        <span class="text-sm text-gray-500">ชั่วโมง</span>
-                    </div>
-                    <div class="bg-white/60 rounded-xl p-4 shadow-sm">
-                        <span id="minutes" class="block text-4xl font-bold text-love-500">0</span>
-                        <span class="text-sm text-gray-500">นาที</span>
-                    </div>
-                    <div class="bg-white/60 rounded-xl p-4 shadow-sm">
-                        <span id="seconds" class="block text-4xl font-bold text-love-500">0</span>
-                        <span class="text-sm text-gray-500">วินาที</span>
-                    </div>
-                </div>
-                <div class="mt-6 text-gray-500 text-sm">
-                    นับตั้งแต่วันแรก <span id="start-date-display" class="font-semibold text-love-600"></span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Message Section -->
-        <section class="max-w-3xl mx-auto px-4 mb-16">
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden relative">
-                <div class="h-2 bg-gradient-to-r from-love-300 via-love-500 to-love-300"></div>
-                <div class="p-8 md:p-12">
-                    <div class="text-4xl text-love-400 mb-4 opacity-50"><i class="fa-solid fa-quote-left"></i></div>
-                    
-                    <!-- EDIT YOUR MESSAGE HERE -->
-                    <div class="prose prose-pink mx-auto text-lg md:text-xl text-gray-600 leading-relaxed text-center space-y-4">
-                        <p>
-                            ถึง <b>เธอคนดีของเค้า</b>,
-                        </p>
-                        <p>
-                            สุขสันต์วันครบรอบนะครับ ไม่น่าเชื่อเลยว่าเวลาจะผ่านไปเร็วขนาดนี้ 
-                            ขอบคุณที่เข้ามาเป็นความสดใส เป็นกำลังใจ และเป็นรอยยิ้มให้กันในทุกๆ วัน
-                        </p>
-                        <p>
-                            ขอโทษที่อาจจะมีดื้อบ้าง งอแงบ้าง แต่ก็รักเธอที่สุดนะ 
-                            ขอให้เราได้ฉลองวันครบรอบด้วยกันแบบนี้ไปอีกนานๆ เลย
-                        </p>
-                        <p class="font-bold text-love-500 mt-8">
-                            รักเสมอและตลอดไป <i class="fa-solid fa-heart ml-1"></i>
-                        </p>
-                    </div>
-                    <!-- END MESSAGE -->
-
-                    <div class="text-4xl text-love-400 mt-4 text-right opacity-50"><i class="fa-solid fa-quote-right"></i></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Photo Gallery -->
-        <section class="max-w-6xl mx-auto px-4 mb-20">
-            <h2 class="text-3xl font-bold text-center text-gray-700 mb-10 font-script">Our Memories</h2>
+        <!-- Kissing Animation Container -->
+        <div class="flex items-end justify-center mb-6 relative z-50 h-24">
+            <!-- Dog -->
+            <div class="text-7xl kiss-dog relative -mr-2 z-10">🐶</div>
             
-            <!-- Grid Layout -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Photo 1 -->
-                <div class="photo-card bg-white p-3 rounded-2xl shadow-md rotate-[-2deg]">
-                    <div class="aspect-[4/5] overflow-hidden rounded-xl bg-gray-100 relative group">
-                        <!-- REPLACE src WITH YOUR IMAGE URL -->
-                        <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=600&auto=format&fit=crop" 
-                             alt="Couple Photo" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
-                    </div>
-                    <div class="pt-3 text-center font-handwriting text-gray-500 text-sm">เดทแรกของเรา</div>
-                </div>
+            <!-- Heart (Popping up) -->
+            <div class="text-5xl kiss-heart absolute -top-8 text-red-500 z-20">💖</div>
+            
+            <!-- Pig (Flipped to face dog) -->
+            <div class="text-7xl kiss-pig relative -ml-2 z-10">🐷</div>
+        </div>
 
-                <!-- Photo 2 -->
-                <div class="photo-card bg-white p-3 rounded-2xl shadow-md rotate-[1deg] md:mt-10">
-                    <div class="aspect-[4/5] overflow-hidden rounded-xl bg-gray-100 relative group">
-                        <!-- REPLACE src WITH YOUR IMAGE URL -->
-                        <img src="https://images.unsplash.com/photo-1621112904887-419379ce6824?q=80&w=600&auto=format&fit=crop" 
-                             alt="Couple Photo" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
-                    </div>
-                    <div class="pt-3 text-center font-handwriting text-gray-500 text-sm">ทริปไปเที่ยวทะเล</div>
-                </div>
+        <div class="glass-card p-8 w-full max-w-md text-center mx-4 relative">
+            <h1 class="text-2xl font-bold text-pink-600 mb-2">รักของเรา...วันไหนเอ่ย?</h1>
+            <p class="text-gray-600 text-sm mb-6">ใส่รหัสวันครบรอบของเราหน่อยนะ (DDMMYY)</p>
 
-                <!-- Photo 3 -->
-                <div class="photo-card bg-white p-3 rounded-2xl shadow-md rotate-[-1deg]">
-                    <div class="aspect-[4/5] overflow-hidden rounded-xl bg-gray-100 relative group">
-                        <!-- REPLACE src WITH YOUR IMAGE URL -->
-                        <img src="https://images.unsplash.com/photo-1529634597503-139d372668e3?q=80&w=600&auto=format&fit=crop" 
-                             alt="Couple Photo" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
-                    </div>
-                    <div class="pt-3 text-center font-handwriting text-gray-500 text-sm">รูปคู่ที่ชอบที่สุด</div>
-                </div>
+            <div class="relative">
+                <input type="tel" id="passcodeInput" maxlength="6" autocomplete="off"
+                    class="w-full text-center text-3xl tracking-[0.5em] font-bold text-gray-700 py-3 px-4 rounded-xl border-2 border-pink-200 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200 bg-white/80 shadow-inner"
+                    placeholder="• • • • • •">
+                <p id="errorMsg" class="text-red-500 text-sm mt-2 opacity-0 transition-opacity font-bold bg-white/50 rounded inline-block px-2">รหัสผิดจ้า! ลองนึกดูดีๆ นะ</p>
             </div>
-        </section>
 
-        <!-- Footer -->
-        <footer class="text-center pb-10 text-gray-400 text-sm">
-            <p>Made with <i class="fa-solid fa-heart text-red-500 animate-pulse"></i> for You</p>
-        </footer>
-
-        <!-- Music Toggle Button (Optional) -->
-        <div class="fixed bottom-4 right-4 z-40">
-            <button id="music-btn" class="bg-white/80 backdrop-blur p-3 rounded-full shadow-lg text-love-500 hover:bg-love-500 hover:text-white transition-all duration-300">
-                <i class="fa-solid fa-music"></i>
+            <button onclick="checkPasscode()" 
+                class="mt-6 w-full bg-gradient-to-r from-pink-500 via-red-400 to-yellow-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg transform active:scale-95 transition hover:shadow-xl hover:scale-105">
+                เปิดกล่องหัวใจ ❤️
             </button>
         </div>
+
+        <div class="waves-container">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+        </div>
+
+        <!-- MORE Beach Decorations -->
+        <!-- Left Side -->
+        <div class="beach-element float-item" style="left: 5%; bottom: 30px; font-size: 2.5rem;">🛟</div>
+        <div class="beach-element" style="left: 15%; bottom: 15px; font-size: 1.8rem;">🐚</div>
+        <div class="beach-element" style="left: 22%; bottom: 45px; font-size: 2rem;">🪨</div>
+        <div class="beach-element" style="left: 28%; bottom: 10px; font-size: 1.5rem; opacity: 0.9;">⭐</div>
+
+        <!-- Right Side -->
+        <div class="beach-element crab-anim" style="right: 15%; bottom: 20px; font-size: 2.2rem;">🦀</div>
+        <div class="beach-element" style="right: 5%; bottom: 40px; font-size: 2rem;">🪨</div>
+        <div class="beach-element" style="right: 25%; bottom: 50px; font-size: 1.8rem;">🐚</div>
+        <div class="beach-element float-item" style="right: 32%; bottom: 15px; font-size: 2rem; animation-delay: 1s;">⭐</div>
+        
+        <!-- Center-ish items (background) -->
+        <div class="beach-element" style="left: 10%; top: 30%; font-size: 1.5rem; opacity: 0.3; color: white;">✨</div>
+        <div class="beach-element" style="right: 15%; top: 40%; font-size: 2rem; opacity: 0.3; color: white;">✨</div>
+    </div>
+
+    <!-- ================== SCREEN 2: MAIN CONTENT ================== -->
+    <div id="mainContent" class="hidden-screen w-full max-w-2xl p-6 mx-auto flex flex-col items-center justify-center min-h-screen">
+        
+        <!-- Header Section -->
+        <div class="text-center mb-8 reveal-text" id="headerText">
+            <div class="flex justify-center items-center space-x-4 mb-6">
+                <span class="text-7xl animate-bounce">🐶</span>
+                <span class="text-5xl text-red-500 animate-pulse">💖</span>
+                <span class="text-7xl animate-bounce" style="animation-delay: 0.1s;">🐷</span>
+            </div>
+            <h1 class="text-5xl md:text-6xl font-bold text-pink-500 mb-2 drop-shadow-sm" style="font-family: 'Pacifico', cursive;">Happy Anniversary</h1>
+            <div class="inline-block bg-white px-8 py-3 rounded-full shadow-md mt-4 border border-pink-100">
+                <p class="text-2xl text-pink-400 font-semibold tracking-wide">1 Year 6 Months</p>
+            </div>
+        </div>
+
+        <!-- Greeting Card -->
+        <div class="glass-card w-full p-10 md:p-14 text-center shadow-2xl relative overflow-hidden bg-white/90" style="border: 2px solid #ffe4e6;">
+            <!-- Background Blobs -->
+            <div class="absolute -top-10 -left-10 w-40 h-40 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+            <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse" style="animation-delay: 1s;"></div>
+            
+            <!-- Staggered Text Lines -->
+            <div class="relative z-10 flex flex-col items-center justify-center min-h-[300px]">
+                
+                <h2 class="text-3xl font-bold text-gray-800 mb-8 reveal-text msg-line">ถึง... หมูอ้วนของเค้า</h2>
+                
+                <div class="space-y-6 text-gray-700 leading-relaxed text-lg md:text-xl font-light w-full">
+                    <p class="reveal-text msg-line">
+                        สุขสันต์วันครบรอบ <strong class="text-pink-500">1 ปี 6 เดือน</strong> นะคะ/ครับ 🎉
+                    </p>
+                    <p class="reveal-text msg-line">
+                        ขอบคุณที่คอยอยู่ข้างๆ กันมาตลอด <br>
+                        ขอบคุณทุกความรัก ความห่วงใย และความอบอุ่นที่มีให้กันเสมอ
+                    </p>
+                    <p class="reveal-text msg-line">
+                        ขอให้เรารักกันแบบนี้ ดูแลกันแบบนี้ไปนานๆ เลยนะ <br>
+                        เค้าสัญญาว่าจะทำตัวน่ารักๆ และเป็นเด็กดีของหมูอ้วนตลอดไป
+                    </p>
+                    <div class="pt-6 reveal-text msg-line">
+                        <p class="font-bold text-pink-500 text-2xl md:text-3xl" style="font-family: 'Pacifico', cursive;">
+                            "รักหมูอ้วนที่สุดในโลกเลย!"
+                        </p>
+                        <div class="flex justify-center space-x-2 mt-4 text-2xl">
+                            <span>🐶</span><span>❤️</span><span>🐷</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="text-center mt-12 text-pink-300 text-sm reveal-text msg-line">
+            Created with Love for You
+        </div>
+    </div>
+
+    <!-- Music Control -->
+    <div id="musicControl" class="hidden fixed bottom-6 right-6 bg-pink-500 text-white p-4 rounded-full shadow-lg z-40 animate-bounce cursor-pointer hover:bg-pink-600 transition">
+        🎵
     </div>
 
     <script>
-        // CONFIGURATION - แก้ไขค่าต่างๆ ที่นี่
-        const CONFIG = {
-            passcode: "140224", // รหัสผ่าน 6 หลัก
-            startDate: "2023-02-14", // วันที่เริ่มคบกัน (YYYY-MM-DD)
-        };
-
-        // --- Logic: Passcode ---
-        const pinContainer = document.getElementById('pin-container');
-        const pinInputs = [];
-
-        // Create 6 inputs
-        for (let i = 0; i < 6; i++) {
-            const input = document.createElement('input');
-            input.type = 'tel'; // Show number pad on mobile
-            input.maxLength = 1;
-            input.className = 'pin-input w-10 h-12 md:w-12 md:h-14 border-2 border-pink-200 rounded-lg text-center text-xl md:text-2xl font-bold text-love-600 focus:outline-none focus:border-love-500 bg-white/80';
-            
-            input.addEventListener('input', (e) => handleInput(e, i));
-            input.addEventListener('keydown', (e) => handleKeyDown(e, i));
-            
-            pinContainer.appendChild(input);
-            pinInputs.push(input);
-        }
-
-        function handleInput(e, index) {
-            const val = e.target.value;
-            if (val.length === 1) {
-                if (index < 5) {
-                    pinInputs[index + 1].focus();
-                } else {
-                    // Check code when last digit filled
-                    checkPasscode();
-                }
-            }
-        }
-
-        function handleKeyDown(e, index) {
-            if (e.key === 'Backspace' && !e.target.value && index > 0) {
-                pinInputs[index - 1].focus();
-            }
-        }
+        const CORRECT_PASSCODE = '300624';
+        const loginScreen = document.getElementById('loginScreen');
+        const mainContent = document.getElementById('mainContent');
+        const passcodeInput = document.getElementById('passcodeInput');
+        const errorMsg = document.getElementById('errorMsg');
+        const musicControl = document.getElementById('musicControl');
 
         function checkPasscode() {
-            const code = pinInputs.map(input => input.value).join('');
-            if (code === CONFIG.passcode) {
-                unlockWebsite();
+            if (passcodeInput.value === CORRECT_PASSCODE) {
+                unlockSuccess();
             } else {
-                // Shake animation and clear
-                const errMsg = document.getElementById('error-msg');
-                errMsg.style.opacity = '1';
-                pinContainer.classList.add('animate-pulse');
-                setTimeout(() => {
-                    pinContainer.classList.remove('animate-pulse');
-                    pinInputs.forEach(input => input.value = '');
-                    pinInputs[0].focus();
-                    errMsg.style.opacity = '0';
-                }, 1000);
+                unlockFail();
             }
         }
 
-        function unlockWebsite() {
-            const loginScreen = document.getElementById('login-screen');
-            const mainContent = document.getElementById('main-content');
-
-            // Fade out login
-            loginScreen.style.opacity = '0';
-            setTimeout(() => {
-                loginScreen.style.display = 'none';
-                
-                // Show content
-                mainContent.style.display = 'block';
-                // Trigger reflow
-                void mainContent.offsetWidth; 
-                mainContent.style.opacity = '1';
-                
-                startConfetti();
-            }, 700);
-        }
-
-        // --- Logic: Date Counter ---
-        function updateCounter() {
-            const start = new Date(CONFIG.startDate);
-            const now = new Date();
-            const diff = now - start;
-
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((diff / 1000 / 60) % 60);
-            const seconds = Math.floor((diff / 1000) % 60);
-
-            document.getElementById('days').innerText = days;
-            document.getElementById('hours').innerText = hours;
-            document.getElementById('minutes').innerText = minutes;
-            document.getElementById('seconds').innerText = seconds;
-            
-            // Format date string
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('start-date-display').innerText = start.toLocaleDateString('th-TH', options);
-        }
-
-        setInterval(updateCounter, 1000);
-        updateCounter();
-
-        // --- Logic: Background Hearts ---
-        function createFloatingHearts() {
-            const container = document.getElementById('bg-hearts-container');
-            const heartCount = 15;
-
-            for (let i = 0; i < heartCount; i++) {
-                const heart = document.createElement('div');
-                heart.classList.add('bg-heart');
-                heart.innerHTML = '<i class="fa-solid fa-heart"></i>';
-                
-                // Random position and size
-                const size = Math.random() * 20 + 10;
-                heart.style.fontSize = `${size}px`;
-                heart.style.left = `${Math.random() * 100}vw`;
-                heart.style.top = `${Math.random() * 100}vh`;
-                heart.style.animationDuration = `${Math.random() * 5 + 5}s`;
-                heart.style.opacity = Math.random() * 0.5;
-                
-                container.appendChild(heart);
-            }
-        }
-        createFloatingHearts();
-
-        // --- Logic: Simple Confetti Effect on Unlock ---
-        function startConfetti() {
-            const colors = ['#ff0000', '#ff69b4', '#ffd700', '#ffffff'];
-            
-            for (let i = 0; i < 100; i++) {
-                const confetti = document.createElement('div');
-                confetti.style.position = 'fixed';
-                confetti.style.width = '10px';
-                confetti.style.height = '10px';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.top = '-10px';
-                confetti.style.zIndex = '100';
-                confetti.style.borderRadius = '50%';
-                document.body.appendChild(confetti);
-
-                const animation = confetti.animate([
-                    { transform: `translate3d(0,0,0)`, opacity: 1 },
-                    { transform: `translate3d(${Math.random()*100 - 50}px, 100vh, 0)`, opacity: 0 }
-                ], {
-                    duration: Math.random() * 2000 + 1500,
-                    easing: 'cubic-bezier(0, .9, .57, 1)',
-                    delay: Math.random() * 200
-                });
-
-                animation.onfinish = () => confetti.remove();
-            }
-        }
-
-        // --- Music Placeholder ---
-        document.getElementById('music-btn').addEventListener('click', function() {
-            alert('คุณสามารถใส่ลิงก์เพลง YouTube หรือไฟล์ MP3 ได้ในส่วนโค้ดครับ!');
-            // To add real music:
-            // 1. Add <audio id="bg-music" src="song.mp3" loop></audio> in HTML
-            // 2. document.getElementById('bg-music').play(); here
+        passcodeInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') checkPasscode();
         });
 
+        passcodeInput.addEventListener('input', function() {
+            errorMsg.style.opacity = '0';
+            passcodeInput.classList.remove('border-red-500');
+            passcodeInput.classList.add('border-pink-200');
+        });
+
+        function unlockFail() {
+            passcodeInput.classList.remove('border-pink-200');
+            passcodeInput.classList.add('border-red-500');
+            passcodeInput.classList.add('animate-pulse'); 
+            errorMsg.style.opacity = '1';
+            if (navigator.vibrate) navigator.vibrate(200);
+            setTimeout(() => passcodeInput.classList.remove('animate-pulse'), 500);
+        }
+
+        function unlockSuccess() {
+            // 1. Fade out login screen
+            loginScreen.style.opacity = '0';
+            
+            setTimeout(() => {
+                // 2. Hide login, Show Main
+                loginScreen.classList.add('hidden-screen');
+                mainContent.classList.remove('hidden-screen');
+                musicControl.classList.remove('hidden');
+
+                // 3. Start Text Animations (Staggered)
+                playTextAnimations();
+
+                // 4. Trigger Confetti
+                fireConfetti();
+                
+                window.scrollTo(0,0);
+            }, 700); 
+        }
+
+        function playTextAnimations() {
+            // Header
+            document.getElementById('headerText').classList.add('animate-reveal');
+            document.getElementById('headerText').style.animationDelay = '0s';
+
+            // Message Lines (Delay each line)
+            const lines = document.querySelectorAll('.msg-line');
+            lines.forEach((line, index) => {
+                line.classList.add('animate-reveal');
+                // Calculate delay: Header (0.5s) + previous lines
+                line.style.animationDelay = (0.5 + (index * 0.8)) + 's'; 
+            });
+        }
+
+        function fireConfetti() {
+            var duration = 4000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 8,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#ffc0cb', '#ff69b4', '#9d4edd'] 
+                });
+                confetti({
+                    particleCount: 8,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ffc0cb', '#ff69b4', '#9d4edd']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
     </script>
 </body>
 </html>
